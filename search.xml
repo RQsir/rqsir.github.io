@@ -119,14 +119,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[java内存管理 -- 栈 && 堆 && 方法区]]></title>
-    <url>%2F2019%2F04%2F22%2Fjava%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-%E6%A0%88-%E5%A0%86-%E6%96%B9%E6%B3%95%E5%8C%BA%2F</url>
-    <content type="text"><![CDATA[“栈”——存储方法及其中的局部变量程序由数据和方法组成，而它们都可以用地址指代。栈便是存储这些地址的地方。栈中的内存是以方法为单位进行划分的，方法调用结束后，内存回收。我们在栈中调用某个方法，首先先开辟一块栈内存区，内存区的开头存储的是被调用方法地址，其他内存空间用于存储方法中的局部变量地址。然后cpu通过方法的地址，到方法区查找并执行对应代码。遇到变量，则存储在之前的栈内存中；遇到方法，则在栈中开辟新的内存空间。方法之间的调用是以“栈”的形式体现的，即“被调用”的方法，后入栈，先出栈。“堆”——存储New出来的对象由JVM的垃圾回收机制进行管理，空闲时回收“方法区”——存储方法代码在java中，方法区一般存储着class文件，而方法则包含在相应的class中举个栗子“堆”和“栈”的例子1int[] arr = new int[3];如上，我们声明并初始化了一个整型数组。其中整型数组 arr 就是“栈”变量，而 new int[3] 属于堆变量。“方法区”的例子如下图所示，当jvm调用方法时，无论是main方法还是change方法，其都是通过在方法区查找对应class文件中的对应方法，然后将对应代码加载到栈内存，最后由cpu去执行。]]></content>
+    <title><![CDATA[成员变量 && 局部变量 && 构造方法 && 导包]]></title>
+    <url>%2F2019%2F04%2F22%2F%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-%E5%AF%BC%E5%8C%85%2F</url>
+    <content type="text"><![CDATA[java中的“成员变量”和“局部变量”成员变量局部变量声明位置不同在方法外在方法内或方法声明上（形参）存储空间不同在堆内存在栈内存生命周期不同随着对象的产生而产生，随着对象的销毁而销毁随着方法的产生而产生，随着方法的销毁而销毁初始化不同系统自动初始化（通过构造函数完成）手动初始化（不初始化会报错）java 中的构造方法java中的构造方法可以重载java中如果没有构造方法，编译器会自动补上无参构造方法；但一但编译器检测到有构造函数，则不会自动补上无参构造方法，如这时候再调用无参构造，则会报错，因此推荐手动书写无参构造方法。java中的导包属于java.lang包中的类，使用时无需导包，例如Object类、String类等。]]></content>
       <categories>
         <category>java-se</category>
       </categories>
       <tags>
-        <tag>java内存管理</tag>
+        <tag>“成员变量”和“局部变量”</tag>
+        <tag>构造方法</tag>
+        <tag>导包</tag>
       </tags>
   </entry>
   <entry>
@@ -141,16 +143,14 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[成员变量 && 局部变量 && 构造方法 && 导包]]></title>
-    <url>%2F2019%2F04%2F22%2F%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-%E5%AF%BC%E5%8C%85%2F</url>
-    <content type="text"><![CDATA[java中的“成员变量”和“局部变量”成员变量局部变量声明位置不同在方法外在方法内或方法声明上（形参）存储空间不同在堆内存在栈内存生命周期不同随着对象的产生而产生，随着对象的销毁而销毁随着方法的产生而产生，随着方法的销毁而销毁初始化不同系统自动初始化（通过构造函数完成）手动初始化（不初始化会报错）java 中的构造方法java中的构造方法可以重载java中如果没有构造方法，编译器会自动补上无参构造方法；但一但编译器检测到有构造函数，则不会自动补上无参构造方法，如这时候再调用无参构造，则会报错，因此推荐手动书写无参构造方法。java中的导包属于java.lang包中的类，使用时无需导包，例如Object类、String类等。]]></content>
+    <title><![CDATA[java内存管理 -- 栈 && 堆 && 方法区]]></title>
+    <url>%2F2019%2F04%2F22%2Fjava%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-%E6%A0%88-%E5%A0%86-%E6%96%B9%E6%B3%95%E5%8C%BA%2F</url>
+    <content type="text"><![CDATA[“栈”——存储方法及其中的局部变量程序由数据和方法组成，而它们都可以用地址指代。栈便是存储这些地址的地方。栈中的内存是以方法为单位进行划分的，方法调用结束后，内存回收。我们在栈中调用某个方法，首先先开辟一块栈内存区，内存区的开头存储的是被调用方法地址，其他内存空间用于存储方法中的局部变量地址。然后cpu通过方法的地址，到方法区查找并执行对应代码。遇到变量，则存储在之前的栈内存中；遇到方法，则在栈中开辟新的内存空间。方法之间的调用是以“栈”的形式体现的，即“被调用”的方法，后入栈，先出栈。“堆”——存储New出来的对象由JVM的垃圾回收机制进行管理，空闲时回收“方法区”——存储方法代码在java中，方法区一般存储着class文件，而方法则包含在相应的class中举个栗子“堆”和“栈”的例子1int[] arr = new int[3];如上，我们声明并初始化了一个整型数组。其中整型数组 arr 就是“栈”变量，而 new int[3] 属于堆变量。“方法区”的例子如下图所示，当jvm调用方法时，无论是main方法还是change方法，其都是通过在方法区查找对应class文件中的对应方法，然后将对应代码加载到栈内存，最后由cpu去执行。]]></content>
       <categories>
         <category>java-se</category>
       </categories>
       <tags>
-        <tag>“成员变量”和“局部变量”</tag>
-        <tag>构造方法</tag>
-        <tag>导包</tag>
+        <tag>java内存管理</tag>
       </tags>
   </entry>
   <entry>
@@ -220,17 +220,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Ruby -- 安装]]></title>
-    <url>%2F2019%2F04%2F10%2FRuby-%E5%AE%89%E8%A3%85%2F</url>
-    <content type="text"><![CDATA[Ruby 安装分3中途径：官方下载源码，编译make，然后make install，优点是可以保持版本最新通过系统自带apt 安装，sudo apt install -y ruby-full ，简单快捷，但一般版本偏旧通过第三方包管理器安装，这里选择RVMRVM安装Ruby安装RVM12$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB$ curl -sSL https://get.rvm.io | bash -s stable安装过后，需要刷新一下bash环境1$ source /etc/profile.d/rvm.sh检查是否安装成功1$ rvm -v用RVM安装Ruby1.查看已发布Ruby1$ rvm list known2.安装指定版本的Ruby，完成后Ruby和RubyGems会同时安装好1$ rvm install 2.6.23.设置默认ruby版本1$ rvm 2.6.2 --default如果报错12345RVM is not a function, selecting rubies with 'rvm use ...' will not work.You need to change your terminal emulator preferences to allow login shell.Sometimes it is required to use `/bin/bash --login` as the command.Please visit https://rvm.io/integration/gnome-terminal/ for an example.只需执行/bin/zsh --login 即可解决，更多请看这里4.检查ruby和gem是否安装成功12$ ruby -v$ gem -vRVM常用命令查询已安装的ruby1$ rvm list卸载指定版本ruby1$ rvm remove 2.6.2Ruby中国源替换替换命令12$ gem source -r https://rubygems.org/$ gem source -a https://gems.ruby-china.com/查看当前源1$ gem sources -l]]></content>
-      <categories>
-        <category>编程语言</category>
-      </categories>
-      <tags>
-        <tag>ruby</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[百度anyQ -- 编译错误]]></title>
     <url>%2F2019%2F04%2F10%2F%E7%99%BE%E5%BA%A6anyQ-%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF%2F</url>
     <content type="text"><![CDATA[偶然在github上发现了百度的anyQ智能对话框架，刚好自己也在研究这一块，遂决定重现一下这个模型。中途遇到不少编译错误，现记录下来错误执行mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; make 后报错如下：1234/home/AnyQ/build/third_party/include/dmlc/./logging.h:323:31: error: ‘DMLC_LOG_STACK_TRACE_SIZE’ was not declared in this scopemake[2]: *** [third_party/paddle/src/extern_paddle-stamp/extern_paddle-build] Error 2make[1]: *** [CMakeFiles/extern_paddle.dir/all] Error 2make: *** [all] Error 2解决方法：首先将原官方https://github.com/baidu/AnyQ.git 替换为 https://github.com/ljch2018/AnyQ.git然后修改如下两个文件，使之以单线程编译即可1234xgboost.cmake：INSTALL_COMMAND cd $&#123;XGBOOST_INSTALL_DIR&#125; &amp;&amp; make -j1paddle.cmakeBUILD_COMMAND cd $&#123;PADDLE_INSTALL_DIR&#125; &amp;&amp; make -j1建议尽量使用官方的docker镜像，避免不必用的环境问题12# paddle官方镜像docker pull paddlepaddle/paddle:latest-dev]]></content>
@@ -239,6 +228,17 @@
       </categories>
       <tags>
         <tag>anyQ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Ruby -- 安装]]></title>
+    <url>%2F2019%2F04%2F10%2FRuby-%E5%AE%89%E8%A3%85%2F</url>
+    <content type="text"><![CDATA[Ruby 安装分3中途径：官方下载源码，编译make，然后make install，优点是可以保持版本最新通过系统自带apt 安装，sudo apt install -y ruby-full ，简单快捷，但一般版本偏旧通过第三方包管理器安装，这里选择RVMRVM安装Ruby安装RVM12$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB$ curl -sSL https://get.rvm.io | bash -s stable安装过后，需要刷新一下bash环境1$ source /etc/profile.d/rvm.sh检查是否安装成功1$ rvm -v用RVM安装Ruby1.查看已发布Ruby1$ rvm list known2.安装指定版本的Ruby，完成后Ruby和RubyGems会同时安装好1$ rvm install 2.6.23.设置默认ruby版本1$ rvm 2.6.2 --default如果报错12345RVM is not a function, selecting rubies with 'rvm use ...' will not work.You need to change your terminal emulator preferences to allow login shell.Sometimes it is required to use `/bin/bash --login` as the command.Please visit https://rvm.io/integration/gnome-terminal/ for an example.只需执行/bin/zsh --login 即可解决，更多请看这里4.检查ruby和gem是否安装成功12$ ruby -v$ gem -vRVM常用命令查询已安装的ruby1$ rvm list卸载指定版本ruby1$ rvm remove 2.6.2Ruby中国源替换替换命令12$ gem source -r https://rubygems.org/$ gem source -a https://gems.ruby-china.com/查看当前源1$ gem sources -l]]></content>
+      <categories>
+        <category>编程语言</category>
+      </categories>
+      <tags>
+        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>
