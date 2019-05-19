@@ -283,19 +283,19 @@
   </entry>
   
   <entry>
-    <title>成员变量 &amp;&amp; 局部变量 &amp;&amp; 构造方法 &amp;&amp; 导包</title>
-    <link href="http://rqsir.github.io/2019/04/22/%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-%E5%AF%BC%E5%8C%85/"/>
-    <id>http://rqsir.github.io/2019/04/22/成员变量-局部变量-构造方法-导包/</id>
+    <title>java内存管理 -- 栈 &amp;&amp; 堆 &amp;&amp; 方法区</title>
+    <link href="http://rqsir.github.io/2019/04/22/java%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-%E6%A0%88-%E5%A0%86-%E6%96%B9%E6%B3%95%E5%8C%BA/"/>
+    <id>http://rqsir.github.io/2019/04/22/java内存管理-栈-堆-方法区/</id>
     <published>2019-04-21T16:00:00.000Z</published>
-    <updated>2019-05-18T16:27:42.677Z</updated>
+    <updated>2019-05-18T16:32:26.740Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="java中的“成员变量”和“局部变量”"><a href="#java中的“成员变量”和“局部变量”" class="headerlink" title="java中的“成员变量”和“局部变量”"></a>java中的“成员变量”和“局部变量”</h2><table><thead><tr><th style="text-align:center"></th><th style="text-align:center">成员变量</th><th style="text-align:center">局部变量</th></tr></thead><tbody><tr><td style="text-align:center">声明位置不同</td><td style="text-align:center">在方法外</td><td style="text-align:center">在方法内或方法声明上（形参）</td></tr><tr><td style="text-align:center">存储空间不同</td><td style="text-align:center">在堆内存</td><td style="text-align:center">在栈内存</td></tr><tr><td style="text-align:center">生命周期不同</td><td style="text-align:center">随着对象的产生而产生，随着对象的销毁而销毁</td><td style="text-align:center">随着方法的产生而产生，随着方法的销毁而销毁</td></tr><tr><td style="text-align:center">初始化不同</td><td style="text-align:center">系统自动初始化（通过构造函数完成）</td><td style="text-align:center">手动初始化（不初始化会报错）</td></tr></tbody></table><h2 id="java-中的构造方法"><a href="#java-中的构造方法" class="headerlink" title="java 中的构造方法"></a>java 中的构造方法</h2><ul><li><code>java</code>中的构造方法可以重载</li><li><code>java</code>中如果没有构造方法，编译器会自动补上无参构造方法；但一但编译器检测到有构造函数，则不会自动补上无参构造方法，如这时候再调用无参构造，则会报错，因此<strong>推荐手动书写无参构造方法</strong>。</li></ul><h2 id="java中的导包"><a href="#java中的导包" class="headerlink" title="java中的导包"></a>java中的导包</h2><p>属于<code>java.lang</code>包中的类，使用时无需导包，例如<code>Object</code>类、<code>String</code>类等。</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="“栈”——存储方法及其中的局部变量"><a href="#“栈”——存储方法及其中的局部变量" class="headerlink" title="“栈”——存储方法及其中的局部变量"></a>“栈”——存储方法及其中的局部变量</h2><p>程序由数据和方法组成，而它们都可以用地址指代。栈便是存储这些地址的地方。</p><ul><li>栈中的内存是以方法为单位进行划分的，方法调用结束后，内存回收。</li><li>我们在栈中调用某个方法，首先先开辟一块栈内存区，内存区的开头存储的是被调用方法地址，其他内存空间用于存储方法中的局部变量地址。然后<code>cpu</code>通过方法的地址，到方法区查找并执行对应代码。遇到变量，则存储在之前的栈内存中；遇到方法，则在栈中开辟新的内存空间。</li><li>方法之间的调用是以“栈”的形式体现的，即“被调用”的方法，后入栈，先出栈。</li></ul><h2 id="“堆”——存储New出来的对象"><a href="#“堆”——存储New出来的对象" class="headerlink" title="“堆”——存储New出来的对象"></a>“堆”——存储New出来的对象</h2><p>由<code>JVM</code>的垃圾回收机制进行管理，空闲时回收</p><h2 id="“方法区”——存储方法代码"><a href="#“方法区”——存储方法代码" class="headerlink" title="“方法区”——存储方法代码"></a>“方法区”——存储方法代码</h2><p>在java中，方法区一般存储着class文件，而方法则包含在相应的class中</p><h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><p>“堆”和“栈”的例子</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>];</span><br></pre></td></tr></table></figure><p>如上，我们声明并初始化了一个整型数组。其中整型数组 <code>arr</code> 就是“栈”变量，而 <code>new int[3]</code> 属于堆变量。</p><p>“方法区”的例子</p><p>如下图所示，当<code>jvm</code>调用方法时，无论是<code>main</code>方法还是<code>change</code>方法，其都是通过在方法区查找对应class文件中的对应方法，然后将对应代码加载到栈内存，最后由<code>cpu</code>去执行。</p><p><img src="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/81a5cfb3ly1g29bu9wfntj211v0jfq41.jpg?token=AKZRZC5CJQ7VBSBYGVI3KOC4YQIXS" alt=""></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;java中的“成员变量”和“局部变量”&quot;&gt;&lt;a href=&quot;#java中的“成员变量”和“局部变量”&quot; class=&quot;headerlink&quot; title=&quot;java中的“成员变量”和“局部变量”&quot;&gt;&lt;/a&gt;java中的“成员变量”和“局部变量”&lt;/h2&gt;&lt;tabl
+        &lt;h2 id=&quot;“栈”——存储方法及其中的局部变量&quot;&gt;&lt;a href=&quot;#“栈”——存储方法及其中的局部变量&quot; class=&quot;headerlink&quot; title=&quot;“栈”——存储方法及其中的局部变量&quot;&gt;&lt;/a&gt;“栈”——存储方法及其中的局部变量&lt;/h2&gt;&lt;p&gt;程序由数据和方法组成
       
     
     </summary>
@@ -303,11 +303,7 @@
       <category term="java-se" scheme="http://rqsir.github.io/categories/java-se/"/>
     
     
-      <category term="“成员变量”和“局部变量”" scheme="http://rqsir.github.io/tags/%E2%80%9C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E2%80%9D%E5%92%8C%E2%80%9C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E2%80%9D/"/>
-    
-      <category term="构造方法" scheme="http://rqsir.github.io/tags/%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/"/>
-    
-      <category term="导包" scheme="http://rqsir.github.io/tags/%E5%AF%BC%E5%8C%85/"/>
+      <category term="java内存管理" scheme="http://rqsir.github.io/tags/java%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
     
   </entry>
   
@@ -337,19 +333,19 @@
   </entry>
   
   <entry>
-    <title>java内存管理 -- 栈 &amp;&amp; 堆 &amp;&amp; 方法区</title>
-    <link href="http://rqsir.github.io/2019/04/22/java%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-%E6%A0%88-%E5%A0%86-%E6%96%B9%E6%B3%95%E5%8C%BA/"/>
-    <id>http://rqsir.github.io/2019/04/22/java内存管理-栈-堆-方法区/</id>
+    <title>成员变量 &amp;&amp; 局部变量 &amp;&amp; 构造方法 &amp;&amp; 导包</title>
+    <link href="http://rqsir.github.io/2019/04/22/%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-%E5%AF%BC%E5%8C%85/"/>
+    <id>http://rqsir.github.io/2019/04/22/成员变量-局部变量-构造方法-导包/</id>
     <published>2019-04-21T16:00:00.000Z</published>
-    <updated>2019-05-18T16:32:26.740Z</updated>
+    <updated>2019-05-18T16:27:42.677Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="“栈”——存储方法及其中的局部变量"><a href="#“栈”——存储方法及其中的局部变量" class="headerlink" title="“栈”——存储方法及其中的局部变量"></a>“栈”——存储方法及其中的局部变量</h2><p>程序由数据和方法组成，而它们都可以用地址指代。栈便是存储这些地址的地方。</p><ul><li>栈中的内存是以方法为单位进行划分的，方法调用结束后，内存回收。</li><li>我们在栈中调用某个方法，首先先开辟一块栈内存区，内存区的开头存储的是被调用方法地址，其他内存空间用于存储方法中的局部变量地址。然后<code>cpu</code>通过方法的地址，到方法区查找并执行对应代码。遇到变量，则存储在之前的栈内存中；遇到方法，则在栈中开辟新的内存空间。</li><li>方法之间的调用是以“栈”的形式体现的，即“被调用”的方法，后入栈，先出栈。</li></ul><h2 id="“堆”——存储New出来的对象"><a href="#“堆”——存储New出来的对象" class="headerlink" title="“堆”——存储New出来的对象"></a>“堆”——存储New出来的对象</h2><p>由<code>JVM</code>的垃圾回收机制进行管理，空闲时回收</p><h2 id="“方法区”——存储方法代码"><a href="#“方法区”——存储方法代码" class="headerlink" title="“方法区”——存储方法代码"></a>“方法区”——存储方法代码</h2><p>在java中，方法区一般存储着class文件，而方法则包含在相应的class中</p><h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><p>“堆”和“栈”的例子</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>];</span><br></pre></td></tr></table></figure><p>如上，我们声明并初始化了一个整型数组。其中整型数组 <code>arr</code> 就是“栈”变量，而 <code>new int[3]</code> 属于堆变量。</p><p>“方法区”的例子</p><p>如下图所示，当<code>jvm</code>调用方法时，无论是<code>main</code>方法还是<code>change</code>方法，其都是通过在方法区查找对应class文件中的对应方法，然后将对应代码加载到栈内存，最后由<code>cpu</code>去执行。</p><p><img src="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/81a5cfb3ly1g29bu9wfntj211v0jfq41.jpg?token=AKZRZC5CJQ7VBSBYGVI3KOC4YQIXS" alt=""></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="java中的“成员变量”和“局部变量”"><a href="#java中的“成员变量”和“局部变量”" class="headerlink" title="java中的“成员变量”和“局部变量”"></a>java中的“成员变量”和“局部变量”</h2><table><thead><tr><th style="text-align:center"></th><th style="text-align:center">成员变量</th><th style="text-align:center">局部变量</th></tr></thead><tbody><tr><td style="text-align:center">声明位置不同</td><td style="text-align:center">在方法外</td><td style="text-align:center">在方法内或方法声明上（形参）</td></tr><tr><td style="text-align:center">存储空间不同</td><td style="text-align:center">在堆内存</td><td style="text-align:center">在栈内存</td></tr><tr><td style="text-align:center">生命周期不同</td><td style="text-align:center">随着对象的产生而产生，随着对象的销毁而销毁</td><td style="text-align:center">随着方法的产生而产生，随着方法的销毁而销毁</td></tr><tr><td style="text-align:center">初始化不同</td><td style="text-align:center">系统自动初始化（通过构造函数完成）</td><td style="text-align:center">手动初始化（不初始化会报错）</td></tr></tbody></table><h2 id="java-中的构造方法"><a href="#java-中的构造方法" class="headerlink" title="java 中的构造方法"></a>java 中的构造方法</h2><ul><li><code>java</code>中的构造方法可以重载</li><li><code>java</code>中如果没有构造方法，编译器会自动补上无参构造方法；但一但编译器检测到有构造函数，则不会自动补上无参构造方法，如这时候再调用无参构造，则会报错，因此<strong>推荐手动书写无参构造方法</strong>。</li></ul><h2 id="java中的导包"><a href="#java中的导包" class="headerlink" title="java中的导包"></a>java中的导包</h2><p>属于<code>java.lang</code>包中的类，使用时无需导包，例如<code>Object</code>类、<code>String</code>类等。</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;“栈”——存储方法及其中的局部变量&quot;&gt;&lt;a href=&quot;#“栈”——存储方法及其中的局部变量&quot; class=&quot;headerlink&quot; title=&quot;“栈”——存储方法及其中的局部变量&quot;&gt;&lt;/a&gt;“栈”——存储方法及其中的局部变量&lt;/h2&gt;&lt;p&gt;程序由数据和方法组成
+        &lt;h2 id=&quot;java中的“成员变量”和“局部变量”&quot;&gt;&lt;a href=&quot;#java中的“成员变量”和“局部变量”&quot; class=&quot;headerlink&quot; title=&quot;java中的“成员变量”和“局部变量”&quot;&gt;&lt;/a&gt;java中的“成员变量”和“局部变量”&lt;/h2&gt;&lt;tabl
       
     
     </summary>
@@ -357,7 +353,11 @@
       <category term="java-se" scheme="http://rqsir.github.io/categories/java-se/"/>
     
     
-      <category term="java内存管理" scheme="http://rqsir.github.io/tags/java%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+      <category term="“成员变量”和“局部变量”" scheme="http://rqsir.github.io/tags/%E2%80%9C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E2%80%9D%E5%92%8C%E2%80%9C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E2%80%9D/"/>
+    
+      <category term="构造方法" scheme="http://rqsir.github.io/tags/%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/"/>
+    
+      <category term="导包" scheme="http://rqsir.github.io/tags/%E5%AF%BC%E5%8C%85/"/>
     
   </entry>
   
@@ -512,27 +512,27 @@
   </entry>
   
   <entry>
-    <title>百度anyQ -- 编译错误</title>
-    <link href="http://rqsir.github.io/2019/04/10/%E7%99%BE%E5%BA%A6anyQ-%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF/"/>
-    <id>http://rqsir.github.io/2019/04/10/百度anyQ-编译错误/</id>
+    <title>Ruby -- 安装</title>
+    <link href="http://rqsir.github.io/2019/04/10/Ruby-%E5%AE%89%E8%A3%85/"/>
+    <id>http://rqsir.github.io/2019/04/10/Ruby-安装/</id>
     <published>2019-04-09T16:00:00.000Z</published>
-    <updated>2019-05-18T15:57:25.034Z</updated>
+    <updated>2019-05-18T15:57:06.522Z</updated>
     
-    <content type="html"><![CDATA[<blockquote><p>偶然在github上发现了百度的anyQ智能对话框架，刚好自己也在研究这一块，遂决定重现一下这个模型。中途遇到不少编译错误，现记录下来</p></blockquote><h2 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h2><p>执行<code>mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; make</code> 后报错如下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/home/AnyQ/build/third_party/include/dmlc/./logging.h:323:31: error: ‘DMLC_LOG_STACK_TRACE_SIZE’ was not declared <span class="keyword">in</span> this scope</span><br><span class="line">make[2]: *** [third_party/paddle/src/extern_paddle-stamp/extern_paddle-build] Error 2</span><br><span class="line">make[1]: *** [CMakeFiles/extern_paddle.dir/all] Error 2</span><br><span class="line">make: *** [all] Error 2</span><br></pre></td></tr></table></figure><p>解决方法：</p><ul><li>首先将原官方<code>https://github.com/baidu/AnyQ.git</code> 替换为 <code>https://github.com/ljch2018/AnyQ.git</code></li><li>然后修改如下两个文件，使之以单线程编译即可</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xgboost.cmake：</span><br><span class="line">INSTALL_COMMAND cd $&#123;XGBOOST_INSTALL_DIR&#125; &amp;&amp; make -j1</span><br><span class="line">paddle.cmake</span><br><span class="line">BUILD_COMMAND cd $&#123;PADDLE_INSTALL_DIR&#125; &amp;&amp; make -j1</span><br></pre></td></tr></table></figure><h2 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h2><p><strong>尽量使用官方的docker镜像，避免不必用的环境问题</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># paddle官方镜像</span></span><br><span class="line">docker pull paddlepaddle/paddle:latest-dev</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>Ruby 安装分3中途径：</p><ol><li>官方下载源码，编译make，然后make install，优点是可以保持版本最新</li><li>通过系统自带apt 安装，<code>sudo apt install -y ruby-full</code> ，简单快捷，但一般版本偏旧</li><li>通过第三方包管理器安装，这里选择RVM</li></ol></blockquote><h2 id="RVM安装Ruby"><a href="#RVM安装Ruby" class="headerlink" title="RVM安装Ruby"></a>RVM安装Ruby</h2><h3 id="安装RVM"><a href="#安装RVM" class="headerlink" title="安装RVM"></a>安装RVM</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB</span><br><span class="line">$ curl -sSL https://get.rvm.io | bash -s stable</span><br></pre></td></tr></table></figure><p>安装过后，需要刷新一下bash环境</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">source</span> /etc/profile.d/rvm.sh</span><br></pre></td></tr></table></figure><p>检查是否安装成功</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rvm -v</span><br></pre></td></tr></table></figure><h3 id="用RVM安装Ruby"><a href="#用RVM安装Ruby" class="headerlink" title="用RVM安装Ruby"></a>用RVM安装Ruby</h3><p>1.查看已发布Ruby</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rvm list known</span><br></pre></td></tr></table></figure><p>2.安装指定版本的Ruby，完成后Ruby和RubyGems会同时安装好</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rvm install 2.6.2</span><br></pre></td></tr></table></figure><p>3.设置默认ruby版本</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rvm 2.6.2 --default</span><br></pre></td></tr></table></figure><p>如果报错</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RVM is not a <span class="keyword">function</span>, selecting rubies with <span class="string">'rvm use ...'</span> will not work.</span><br><span class="line"></span><br><span class="line">You need to change your terminal emulator preferences to allow login shell.</span><br><span class="line">Sometimes it is required to use `/bin/bash --login` as the <span class="built_in">command</span>.</span><br><span class="line">Please visit https://rvm.io/integration/gnome-terminal/ <span class="keyword">for</span> an example.</span><br></pre></td></tr></table></figure><p>只需执行<code>/bin/zsh --login</code> 即可解决，更多请看<a href="https://rvm.io/integration/gnome-terminal" target="_blank" rel="noopener">这里</a></p><p>4.检查ruby和gem是否安装成功</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ruby -v</span><br><span class="line">$ gem -v</span><br></pre></td></tr></table></figure><h3 id="RVM常用命令"><a href="#RVM常用命令" class="headerlink" title="RVM常用命令"></a>RVM常用命令</h3><p>查询已安装的ruby</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rvm list</span><br></pre></td></tr></table></figure><p>卸载指定版本ruby</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rvm remove 2.6.2</span><br></pre></td></tr></table></figure><h2 id="Ruby中国源替换"><a href="#Ruby中国源替换" class="headerlink" title="Ruby中国源替换"></a>Ruby中国源替换</h2><p>替换命令</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gem <span class="built_in">source</span> -r https://rubygems.org/</span><br><span class="line">$ gem <span class="built_in">source</span> -a https://gems.ruby-china.com/</span><br></pre></td></tr></table></figure><p>查看当前源</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gem sources -l</span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;blockquote&gt;&lt;p&gt;偶然在github上发现了百度的anyQ智能对话框架，刚好自己也在研究这一块，遂决定重现一下这个模型。中途遇到不少编译错误，现记录下来&lt;/p&gt;&lt;/blockquote&gt;&lt;h2 id=&quot;错误&quot;&gt;&lt;a href=&quot;#错误&quot; class=&quot;headerli
+        &lt;blockquote&gt;&lt;p&gt;Ruby 安装分3中途径：&lt;/p&gt;&lt;ol&gt;&lt;li&gt;官方下载源码，编译make，然后make install，优点是可以保持版本最新&lt;/li&gt;&lt;li&gt;通过系统自带apt 安装，&lt;code&gt;sudo apt install -y ruby-full&lt;/c
       
     
     </summary>
     
-      <category term="智能对话系统" scheme="http://rqsir.github.io/categories/%E6%99%BA%E8%83%BD%E5%AF%B9%E8%AF%9D%E7%B3%BB%E7%BB%9F/"/>
+      <category term="编程语言" scheme="http://rqsir.github.io/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     
-      <category term="anyQ" scheme="http://rqsir.github.io/tags/anyQ/"/>
+      <category term="ruby" scheme="http://rqsir.github.io/tags/ruby/"/>
     
   </entry>
   
