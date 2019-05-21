@@ -375,17 +375,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Ruby -- 安装]]></title>
-    <url>%2F2019%2F04%2F10%2FRuby-%E5%AE%89%E8%A3%85%2F</url>
-    <content type="text"><![CDATA[Ruby 安装分3中途径：官方下载源码，编译make，然后make install，优点是可以保持版本最新通过系统自带apt 安装，sudo apt install -y ruby-full ，简单快捷，但一般版本偏旧通过第三方包管理器安装，这里选择RVMRVM安装Ruby安装RVM12$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB$ curl -sSL https://get.rvm.io | bash -s stable安装过后，需要刷新一下bash环境1$ source /etc/profile.d/rvm.sh检查是否安装成功1$ rvm -v用RVM安装Ruby1.查看已发布Ruby1$ rvm list known2.安装指定版本的Ruby，完成后Ruby和RubyGems会同时安装好1$ rvm install 2.6.23.设置默认ruby版本1$ rvm 2.6.2 --default如果报错12345RVM is not a function, selecting rubies with 'rvm use ...' will not work.You need to change your terminal emulator preferences to allow login shell.Sometimes it is required to use `/bin/bash --login` as the command.Please visit https://rvm.io/integration/gnome-terminal/ for an example.只需执行/bin/zsh --login 即可解决，更多请看这里4.检查ruby和gem是否安装成功12$ ruby -v$ gem -vRVM常用命令查询已安装的ruby1$ rvm list卸载指定版本ruby1$ rvm remove 2.6.2Ruby中国源替换替换命令12$ gem source -r https://rubygems.org/$ gem source -a https://gems.ruby-china.com/查看当前源1$ gem sources -l]]></content>
-      <categories>
-        <category>编程语言</category>
-      </categories>
-      <tags>
-        <tag>ruby</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[百度anyQ -- 编译错误]]></title>
     <url>%2F2019%2F04%2F10%2F%E7%99%BE%E5%BA%A6anyQ-%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF%2F</url>
     <content type="text"><![CDATA[偶然在github上发现了百度的anyQ智能对话框架，刚好自己也在研究这一块，遂决定重现一下这个模型。中途遇到不少编译错误，现记录下来错误执行mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; make 后报错如下：1234/home/AnyQ/build/third_party/include/dmlc/./logging.h:323:31: error: ‘DMLC_LOG_STACK_TRACE_SIZE’ was not declared in this scopemake[2]: *** [third_party/paddle/src/extern_paddle-stamp/extern_paddle-build] Error 2make[1]: *** [CMakeFiles/extern_paddle.dir/all] Error 2make: *** [all] Error 2解决方法：首先将原官方https://github.com/baidu/AnyQ.git 替换为 https://github.com/ljch2018/AnyQ.git然后修改如下两个文件，使之以单线程编译即可1234xgboost.cmake：INSTALL_COMMAND cd $&#123;XGBOOST_INSTALL_DIR&#125; &amp;&amp; make -j1paddle.cmakeBUILD_COMMAND cd $&#123;PADDLE_INSTALL_DIR&#125; &amp;&amp; make -j1建议尽量使用官方的docker镜像，避免不必用的环境问题12# paddle官方镜像docker pull paddlepaddle/paddle:latest-dev]]></content>
@@ -397,6 +386,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[Ruby -- 安装]]></title>
+    <url>%2F2019%2F04%2F10%2FRuby-%E5%AE%89%E8%A3%85%2F</url>
+    <content type="text"><![CDATA[Ruby 安装分3中途径：官方下载源码，编译make，然后make install，优点是可以保持版本最新通过系统自带apt 安装，sudo apt install -y ruby-full ，简单快捷，但一般版本偏旧通过第三方包管理器安装，这里选择RVMRVM安装Ruby安装RVM12$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB$ curl -sSL https://get.rvm.io | bash -s stable安装过后，需要刷新一下bash环境1$ source /etc/profile.d/rvm.sh检查是否安装成功1$ rvm -v用RVM安装Ruby1.查看已发布Ruby1$ rvm list known2.安装指定版本的Ruby，完成后Ruby和RubyGems会同时安装好1$ rvm install 2.6.23.设置默认ruby版本1$ rvm 2.6.2 --default如果报错12345RVM is not a function, selecting rubies with 'rvm use ...' will not work.You need to change your terminal emulator preferences to allow login shell.Sometimes it is required to use `/bin/bash --login` as the command.Please visit https://rvm.io/integration/gnome-terminal/ for an example.只需执行/bin/zsh --login 即可解决，更多请看这里4.检查ruby和gem是否安装成功12$ ruby -v$ gem -vRVM常用命令查询已安装的ruby1$ rvm list卸载指定版本ruby1$ rvm remove 2.6.2Ruby中国源替换替换命令12$ gem source -r https://rubygems.org/$ gem source -a https://gems.ruby-china.com/查看当前源1$ gem sources -l]]></content>
+      <categories>
+        <category>编程语言</category>
+      </categories>
+      <tags>
+        <tag>ruby</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[docker -- 安装]]></title>
     <url>%2F2019%2F04%2F09%2Fdocker-%E5%AE%89%E8%A3%85%2F</url>
     <content type="text"><![CDATA[卸载旧版本123$ sudo apt-get remove docker \ docker-engine \ docker.io安装使用APT安装1.https依赖123456$ sudo apt update$ sudo apt-get install \ apt-transport-https \ ca-certificates \ curl \ software-properties-common2.添加国内源为了确认所下载软件包的合法性，需要添加软件源的 GPG 密钥1$ curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add -​ 向 source.list 中添加 Docker 软件源1234$ sudo add-apt-repository \ "deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu \ $(lsb_release -cs) \ stable"3.安装docker-ce12$ sudo apt-get update$ sudo apt-get install docker-ce使用脚本自动安装在测试或开发环境中 Docker 官方为了简化安装流程，提供了一套便捷的安装脚本，Ubuntu 系统上可以使用这套脚本安装：12$ curl -fsSL get.docker.com -o get-docker.sh$ sudo sh get-docker.sh --mirror Aliyun启动 docker-ce12$ sudo systemctl enable docker$ sudo systemctl start docker默认情况下，docker 命令会使用 Unix socket 与 Docker 引擎通讯。而只有 root 用户和 docker 组的用户才可以访问 Docker 引擎的 Unix socket。出于安全考虑，一般 Linux 系统上不会直接使用 root 用户。因此，更好地做法是将需要使用 docker 的用户加入 docker 用户组。1.建立 docker 组：1$ sudo groupadd docker2.将当前用户加入 docker 组：1$ sudo usermod -aG docker $USER3.重启 docker 服务1$ sudo systemctl restart docker4.切换当前会话到新 group 或者重启 X 会话注意:最后一步是必须的，否则因为 groups 命令获取到的是缓存的组信息，刚添加的组信息未能生效，所以 docker images 执行时同样有错。1$ newgrp - docker镜像加速对于使用 systemd 的系统，请在 /etc/docker/daemon.json 中写入如下内容（如果文件不存在请新建该文件）12345&#123; "registry-mirrors": [ "https://reg-mirror.qiniu.com/" ]&#125;注意，一定要保证该文件符合 json 规范，否则 Docker 将不能启动。之后重新启动服务。12$ sudo systemctl daemon-reload$ sudo systemctl restart docker]]></content>
@@ -405,6 +405,17 @@
       </categories>
       <tags>
         <tag>docker - 安装</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[docker -- Error response from daemon]]></title>
+    <url>%2F2019%2F04%2F09%2Fdocker-Error-response-from-daemon%2F</url>
+    <content type="text"><![CDATA[错误如下：1docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:297: copying bootstrap data to pipe caused \"write init-p: broken pipe\"": unknown.由于docker的版本更新引起解决办法： 3种任选其一使用低版本的dockerdocker CE1$ sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntudocker EE on CentOS 7123$ sudo curl -SsL https://download.docker.com/linux/centos/docker-ce.repo -o /etc/yum.repos.d/docker-ce.repo$ sudo yum --showduplicates list docker-ce$ sudo yum install docker-ce-18.06.1.ce-3-0.el7.centos更多其他版本的安装，看这里升级linux内核例如，你现在在用Ubuntu 14.04，可以将其升级到Ubuntu 16 Xenial1$ sudo apt-get install linux-generic-lts-xenial升级系统版本对于Ubuntu 14.04，你可以使用一下命令升级到Xenial1$ sudo do-release-upgrade如果遇到14.04 --&gt; 16.04 failed; apt (&gt;= 1.0.1ubuntu2.13)&#39; is not installed报错，可以执行以下命令：12$ sudo apt update$ sudo apt dist-upgrade]]></content>
+      <categories>
+        <category>踩坑</category>
+      </categories>
+      <tags>
+        <tag>docker -- Error response from daemon</tag>
       </tags>
   </entry>
   <entry>
@@ -427,17 +438,6 @@
       </categories>
       <tags>
         <tag>docker - 镜像操作</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[docker -- Error response from daemon]]></title>
-    <url>%2F2019%2F04%2F09%2Fdocker-Error-response-from-daemon%2F</url>
-    <content type="text"><![CDATA[错误如下：1docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:297: copying bootstrap data to pipe caused \"write init-p: broken pipe\"": unknown.由于docker的版本更新引起解决办法： 3种任选其一使用低版本的dockerdocker CE1$ sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntudocker EE on CentOS 7123$ sudo curl -SsL https://download.docker.com/linux/centos/docker-ce.repo -o /etc/yum.repos.d/docker-ce.repo$ sudo yum --showduplicates list docker-ce$ sudo yum install docker-ce-18.06.1.ce-3-0.el7.centos更多其他版本的安装，看这里升级linux内核例如，你现在在用Ubuntu 14.04，可以将其升级到Ubuntu 16 Xenial1$ sudo apt-get install linux-generic-lts-xenial升级系统版本对于Ubuntu 14.04，你可以使用一下命令升级到Xenial1$ sudo do-release-upgrade如果遇到14.04 --&gt; 16.04 failed; apt (&gt;= 1.0.1ubuntu2.13)&#39; is not installed报错，可以执行以下命令：12$ sudo apt update$ sudo apt dist-upgrade]]></content>
-      <categories>
-        <category>踩坑</category>
-      </categories>
-      <tags>
-        <tag>docker -- Error response from daemon</tag>
       </tags>
   </entry>
   <entry>
