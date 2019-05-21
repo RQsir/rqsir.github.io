@@ -1,0 +1,368 @@
+<!DOCTYPE html><html class="theme-next gemini use-motion" lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#2196f3"><link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css"><link rel="stylesheet" href="/lib/Han/dist/han.min.css?v=3.3"><link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"><link rel="stylesheet" href="/css/main.css?v=7.1.1"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.1.1"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.1"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.1"><link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#2196f3"><link rel="manifest" href="/manifest.json"><script id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"7.1.1",sidebar:{position:"left",display:"post",offset:12,onmobile:!1,dimmer:!1,b2t:!0,scrollpercent:!0},back2top:!0,back2top_sidebar:!1,fancybox:!1,fastclick:!1,lazyload:!1,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><meta name="description" content="java中为我们提供了很多实用的数据结构，常用的大体上分为两大类：根类为AbstractCollection的单集合容器，以及根类为AbstractMap&amp;lt;K，V&amp;gt;的双集合容器。我们一般本着从最顶层（顶层包含该数据结构的所有公共方法和字段）开始学习，从最底层（顶层包含数据结构的具体实现和特有方法）开始使用的原则，来总结以上两大数据容器。AbstractCollection – 单集合容"><meta name="keywords" content="java - 数据结构"><meta property="og:type" content="article"><meta property="og:title" content="java中的常用数据结构"><meta property="og:url" content="http://rqsir.github.io/2019/05/14/java中的常用数据结构/index.html"><meta property="og:site_name" content="RQ Blog"><meta property="og:description" content="java中为我们提供了很多实用的数据结构，常用的大体上分为两大类：根类为AbstractCollection的单集合容器，以及根类为AbstractMap&amp;lt;K，V&amp;gt;的双集合容器。我们一般本着从最顶层（顶层包含该数据结构的所有公共方法和字段）开始学习，从最底层（顶层包含数据结构的具体实现和特有方法）开始使用的原则，来总结以上两大数据容器。AbstractCollection – 单集合容"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/DeepinScreenshot_select-area_20190505162421.png"><meta property="og:image" content="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/DeepinScreenshot_select-area_20190505164436111.png"><meta property="og:image" content="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/DeepinScreenshot_select-area_20190505162437.png"><meta property="og:updated_time" content="2019-05-21T04:10:45.519Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="java中的常用数据结构"><meta name="twitter:description" content="java中为我们提供了很多实用的数据结构，常用的大体上分为两大类：根类为AbstractCollection的单集合容器，以及根类为AbstractMap&amp;lt;K，V&amp;gt;的双集合容器。我们一般本着从最顶层（顶层包含该数据结构的所有公共方法和字段）开始学习，从最底层（顶层包含数据结构的具体实现和特有方法）开始使用的原则，来总结以上两大数据容器。AbstractCollection – 单集合容"><meta name="twitter:image" content="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/DeepinScreenshot_select-area_20190505162421.png"><link rel="alternate" href="/atom.xml" title="RQ Blog" type="application/atom+xml"><link rel="canonical" href="http://rqsir.github.io/2019/05/14/java中的常用数据结构/"><script id="page.configurations">CONFIG.page={sidebar:""}</script><title>java中的常用数据结构 | RQ Blog</title><script async src="//www.googletagmanager.com/gtag/js?id=UA-129746012-1"></script><script>var host=window.location.hostname;if("localhost"!==host){function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-129746012-1")}</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-title,.use-motion .comments,.use-motion .menu-item,.use-motion .motion-element,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .logo,.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">RQ Blog</span> <span class="logo-line-after"><i></i></span></a></div><h1 class="site-subtitle" itemprop="description">真正的梦就是现实的彼岸。</h1></div><div class="site-nav-toggle"><button aria-label="切换导航栏"><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>分类</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br>搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i> </span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"><input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="http://rqsir.github.io/2019/05/14/java中的常用数据结构/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="RQsir"><meta itemprop="description" content="不积小流，无以成江海。"><meta itemprop="image" content="/images/RQ.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="RQ Blog"></span><header class="post-header"><h2 class="post-title" itemprop="name headline">java中的常用数据结构</h2><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建时间：2019-05-14 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-14T00:00:00+08:00">2019-05-14</time> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-calendar-check-o"></i> </span><span class="post-meta-item-text">更新于</span> <time title="修改时间：2019-05-21 12:10:45" itemprop="dateModified" datetime="2019-05-21T12:10:45+08:00">2019-05-21</time> </span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java-se/" itemprop="url" rel="index"><span itemprop="name">java-se</span></a></span> </span><span class="post-comments-count"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-comment-o"></i> </span><span class="post-meta-item-text">评论数：</span> <a href="/2019/05/14/java中的常用数据结构/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/14/java中的常用数据结构/" itemprop="commentCount"></span> </a></span><span id="/2019/05/14/java中的常用数据结构/" class="leancloud_visitors" data-flag-title="java中的常用数据结构"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">阅读次数：</span> <span class="leancloud-visitors-count"></span></span></div></header><div class="post-body han-init-context" itemprop="articleBody"><blockquote><p>java中为我们提供了很多实用的数据结构，常用的大体上分为两大类：根类为<code>AbstractCollection</code>的单集合容器，以及根类为<code>AbstractMap&lt;K，V&gt;</code>的双集合容器。</p><p>我们一般本着从最顶层（顶层包含该数据结构的所有公共方法和字段）开始学习，从最底层（顶层包含数据结构的具体实现和特有方法）开始使用的原则，来总结以上两大数据容器。</p></blockquote><h2 id="AbstractCollection-–-单集合容器"><a href="#AbstractCollection-–-单集合容器" class="headerlink" title="AbstractCollection – 单集合容器"></a>AbstractCollection – 单集合容器</h2><p><img src="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/DeepinScreenshot_select-area_20190505162421.png" alt=""></p><p>如上图所示：<code>AbstractCollection</code>这个抽象类实际上实现了对应接口<code>Collection</code>，在<code>Collection</code>中定义了所有单集合容器都应具有的特性。</p><p>首先我们一起看一下<code>Collection</code>接口的JDK注释</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">* The root <span class="class"><span class="keyword">interface</span> <span class="title">in</span> <span class="title">the</span> &lt;<span class="title">i</span>&gt;<span class="title">collection</span> <span class="title">hierarchy</span>&lt;/<span class="title">i</span>&gt;.  <span class="title">A</span> <span class="title">collection</span></span></span><br><span class="line"><span class="class">* <span class="title">represents</span> <span class="title">a</span> <span class="title">group</span> <span class="title">of</span> <span class="title">objects</span>, <span class="title">known</span> <span class="title">as</span> <span class="title">its</span> &lt;<span class="title">i</span>&gt;<span class="title">elements</span>&lt;/<span class="title">i</span>&gt;.  <span class="title">Some</span></span></span><br><span class="line"><span class="class">* <span class="title">collections</span> <span class="title">allow</span> <span class="title">duplicate</span> <span class="title">elements</span> <span class="title">and</span> <span class="title">others</span> <span class="title">do</span> <span class="title">not</span>.  <span class="title">Some</span> <span class="title">are</span> <span class="title">ordered</span></span></span><br><span class="line"><span class="class">* <span class="title">and</span> <span class="title">others</span> <span class="title">unordered</span>.  <span class="title">The</span> <span class="title">JDK</span> <span class="title">does</span> <span class="title">not</span> <span class="title">provide</span> <span class="title">any</span> &lt;<span class="title">i</span>&gt;<span class="title">direct</span>&lt;/<span class="title">i</span>&gt;</span></span><br><span class="line">* implementations of this interface: it provides implementations of more</span><br><span class="line">* specific subinterfaces like &lt;tt&gt;Set&lt;/tt&gt; and &lt;tt&gt;List&lt;/tt&gt;.  This interface</span><br><span class="line">* is typically used to pass collections around and manipulate them where</span><br><span class="line">* maximum generality is desired.</span><br></pre></td></tr></table></figure><p>从中，我们可以总结出<code>Collection</code>的几大特点：</p><ul><li>子类中既存在允许重复值（如<code>LinkedList</code>、<code>ArrayList</code>），也存在不允许重复值（如<code>HashSet</code>）</li><li>子类中既存在有序的（如<code>LinkedList</code>、<code>ArrayList</code>），也存在无序的（如<code>HashSet</code>）</li><li>子类中既存在不包含index的（如<code>HashSet</code>），也存在包含index的（如<code>LinkedList</code>、<code>ArrayList</code>）</li></ul><p>对应<code>Collection</code>的一些共有的抽象方法，如下图所示：</p><p><img src="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/DeepinScreenshot_select-area_20190505164436111.png" alt=""></p><p>其中<code>Collection</code>的增、删,分别对应着<code>add(E element)</code>、<code>remove(Object)</code>、<code>clear()</code>（清空集合）</p><p>另外，<strong>集合的遍历</strong>涉及到的两个函数<code>toArray()</code>以及<code>iterator()</code>，我们需重点掌握。</p><p><strong>使用<code>toArray()</code>遍历集合</strong></p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用了向上多态转型</span></span><br><span class="line">Collection c = <span class="keyword">new</span> ArrayList(); </span><br><span class="line">c.add(<span class="string">"I"</span>);</span><br><span class="line">c.add(<span class="string">"love"</span>);</span><br><span class="line">c.add(<span class="string">"java"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//利用数组遍历集合，使用toArray()函数</span></span><br><span class="line">Object[] arr = c.toArray();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">    System.out.println(arr[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>使用迭代器<code>Iterator</code>遍历集合</strong></p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用了向上多态转型</span></span><br><span class="line">Collection c = <span class="keyword">new</span> ArrayList();</span><br><span class="line">c.add(<span class="string">"I"</span>);</span><br><span class="line">c.add(<span class="string">"love"</span>);</span><br><span class="line">c.add(<span class="string">"java"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//利用迭代器遍历集合，使用iterator()函数</span></span><br><span class="line">Iterator it = c.iterator();</span><br><span class="line"><span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">    System.out.println(it.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><em>注意：使用迭代器时不要对原集合进行操作，否则会出现<a href="">并发修改异常</a></em></p><h3 id="Collection子类精讲"><a href="#Collection子类精讲" class="headerlink" title="Collection子类精讲"></a>Collection子类精讲</h3><p>说完了Collection父类的的共有特性和通用操作，现在聊聊其具体子类的一些独有特点。通过继承关系图，我们可以知道Collection可以分为四类：Queue、Deque、List和Set。下面我们主要谈谈List和Set：</p><h3 id="List接口"><a href="#List接口" class="headerlink" title="List接口"></a>List接口</h3><p>先来一段JDK说明</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">* <span class="function">An ordered <span class="title">collection</span> <span class="params">(also known as a &lt;i&gt;sequence&lt;/i&gt;)</span>.  The user of <span class="keyword">this</span></span></span><br><span class="line"><span class="function">* interface has precise control over where in the list each element is</span></span><br><span class="line"><span class="function">* inserted.  The user can access elements by their integer <span class="title">index</span> <span class="params">(position in</span></span></span><br><span class="line"><span class="function"><span class="params">* the list)</span>, and search <span class="keyword">for</span> elements in the list.&lt;p&gt;</span></span><br><span class="line"><span class="function">*</span></span><br><span class="line"><span class="function">* Unlike sets, lists typically allow duplicate elements.  More formally,</span></span><br><span class="line"><span class="function">* lists typically allow pairs of elements &lt;tt&gt;e1&lt;/tt&gt; and &lt;tt&gt;e2&lt;/tt&gt;</span></span><br><span class="line"><span class="function">* such that &lt;tt&gt;e1.<span class="title">equals</span><span class="params">(e2)</span>&lt;/tt&gt;, and they typically allow multiple</span></span><br><span class="line"><span class="function">* <span class="keyword">null</span> elements <span class="keyword">if</span> they allow <span class="keyword">null</span> elements at all.  It is not inconceivable</span></span><br><span class="line"><span class="function">* that someone might wish to implement a list that prohibits duplicates, by</span></span><br><span class="line"><span class="function">* throwing runtime exceptions when the user attempts to insert them, but we</span></span><br><span class="line"><span class="function">* expect <span class="keyword">this</span> usage to be rare.&lt;p&gt;</span></span><br></pre></td></tr></table></figure><p>其特点可以用如下关键词形容：<strong>有序</strong>、<strong>存在索引</strong>、<strong>允许重复</strong></p><p>常用方法有<code>add(int index, E element)</code>、<code>remove(int index)</code>、<code>set(int index, E element)</code>、<code>get(int index)</code>，这些是不同于<code>Collection</code>，<code>List</code>所特有的方法。</p><h4 id="LinkList和ArrayList之大比拼"><a href="#LinkList和ArrayList之大比拼" class="headerlink" title="LinkList和ArrayList之大比拼"></a>LinkList和ArrayList之大比拼</h4><p>在父接口List下，我们接触最多的就是<code>LinkList</code>和<code>ArrayList</code>了。下表是对它们的总结：</p><table><thead><tr><th style="text-align:center">类名</th><th style="text-align:center">特点</th><th style="text-align:center">特有方法</th></tr></thead><tbody><tr><td style="text-align:center">ArrayList</td><td style="text-align:center">底层用可变数组对List进行了实现<br>按index查找很快–O(1)<br>但按值进行查找速度很慢–O(n)<br>修改元素–O(1)<br>删除涉及到数组的移位，也很慢–O(n)<br>尾部添加元素，需要扩大数组–O(n)<br>指定位置添加，需要移动其他元素–O(n)</td><td style="text-align:center">没有，方法基本和List一样</td></tr><tr><td style="text-align:center">LinkedList</td><td style="text-align:center">底层用双向链表实现<br>按index查找不能像数组那样，还是得一个节点一个节点遍历–O(n)<br>按值查找同上–O(n)<br>修改元素和删除很快–O(1)<br>尾部添加元素–O(1)<br>指定位置添加元素–O(1)</td><td style="text-align:center">addFirst(E e)<br>addLast(E e)<br>getFirst( )<br>getLast( )<br>removeFirst( )<br>removeLast( )</td></tr></tbody></table><p>使用指南：</p><ul><li>如果业务查询多，添加和删除少，优先考虑<code>ArrayList</code></li><li>如果业务添加和删除多，查询少，优先考虑<code>LinkedList</code></li><li>一般情况，使用ArrayList就可以了</li></ul><h3 id="set接口"><a href="#set接口" class="headerlink" title="set接口"></a>set接口</h3><p>首先看一下其JDK注释：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* A collection that contains no duplicate elements.  More formally, sets</span><br><span class="line">* contain no pair of elements &lt;code&gt;e1&lt;/code&gt; and &lt;code&gt;e2&lt;/code&gt; such that</span><br><span class="line">* &lt;code&gt;e1.equals(e2)&lt;/code&gt;, and at most one null element.  As implied by</span><br><span class="line">* its name, <span class="keyword">this</span> <span class="class"><span class="keyword">interface</span> <span class="title">models</span> <span class="title">the</span> <span class="title">mathematical</span> &lt;<span class="title">i</span>&gt;<span class="title">set</span>&lt;/<span class="title">i</span>&gt; <span class="title">abstraction</span>.</span></span><br></pre></td></tr></table></figure><p>set的概念和数学上集合的概念基本一致，即：<strong>无序</strong>、<strong>无重复</strong>、<strong>无索引</strong></p><p>其常用方法和<code>Collection</code>一样：<code>add(E element)</code>、<code>remove(Object)</code>和<code>clear()</code></p><h4 id="HashSet-–-存储自定义对象"><a href="#HashSet-–-存储自定义对象" class="headerlink" title="HashSet – 存储自定义对象"></a>HashSet – 存储自定义对象</h4><p>先看一下JDK中对其的定义：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* This <span class="class"><span class="keyword">class</span> <span class="keyword">implements</span> <span class="title">the</span> &lt;<span class="title">tt</span>&gt;<span class="title">Set</span>&lt;/<span class="title">tt</span>&gt; <span class="title">interface</span>, <span class="title">backed</span> <span class="title">by</span> <span class="title">a</span> <span class="title">hash</span> <span class="title">table</span></span></span><br><span class="line"><span class="class">* (<span class="title">actually</span> <span class="title">a</span> &lt;<span class="title">tt</span>&gt;<span class="title">HashMap</span>&lt;/<span class="title">tt</span>&gt; <span class="title">instance</span>).  <span class="title">It</span> <span class="title">makes</span> <span class="title">no</span> <span class="title">guarantees</span> <span class="title">as</span> <span class="title">to</span> <span class="title">the</span></span></span><br><span class="line"><span class="class">* <span class="title">iteration</span> <span class="title">order</span> <span class="title">of</span> <span class="title">the</span> <span class="title">set</span></span>; in particular, it does not guarantee that the</span><br><span class="line">* order will remain constant over time.  This <span class="class"><span class="keyword">class</span> <span class="title">permits</span> <span class="title">the</span> &lt;<span class="title">tt</span>&gt;<span class="title">null</span>&lt;/<span class="title">tt</span>&gt;</span></span><br><span class="line"><span class="class">* <span class="title">element</span>.</span></span><br></pre></td></tr></table></figure><p>从以上注释可知，<code>HaseSet</code>的底层是由<code>HashMap</code>实现的。这里我们可以看一下其源码实现：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    * Adds the specified element to <span class="keyword">this</span> set <span class="keyword">if</span> it is not already present.</span><br><span class="line">    * More formally, adds the specified element &lt;tt&gt;e&lt;/tt&gt; to this set if</span><br><span class="line">    * this set contains no element &lt;tt&gt;e2&lt;/tt&gt; such that</span><br><span class="line">    * &lt;tt&gt;(e==null&amp;nbsp;?&amp;nbsp;e2==null&amp;nbsp;:&amp;nbsp;e.equals(e2))&lt;/tt&gt;.</span><br><span class="line">    * If <span class="keyword">this</span> set already contains the element, the call leaves the set</span><br><span class="line">    * unchanged and returns &lt;tt&gt;false&lt;/tt&gt;.</span><br><span class="line">    *</span><br><span class="line">    * <span class="meta">@param</span> e element to be added to <span class="keyword">this</span> set</span><br><span class="line">    * @return &lt;tt&gt;true&lt;/tt&gt; if this set did not already contain the specified</span><br><span class="line">    * element</span><br><span class="line">    *</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> map.put(e, PRESENT)==<span class="keyword">null</span>; <span class="comment">//这里调用了成员变量map的put方法</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">transient</span> HashMap&lt;E,Object&gt; map;</span><br><span class="line"><span class="comment">// Dummy value to associate with an Object in the backing Map</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object PRESENT = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure><h2 id="AbstractMap-–-双集合容器"><a href="#AbstractMap-–-双集合容器" class="headerlink" title="AbstractMap – 双集合容器"></a>AbstractMap – 双集合容器</h2><p><img src="https://raw.githubusercontent.com/RQsir/blog_pic_bed/master/img/DeepinScreenshot_select-area_20190505162437.png" alt=""></p><p>如图，<code>AbstractMap</code>是相对于<code>AbstractCollection</code>而言，又一抽象数据结构的顶层父类。不同于<code>AbstractCollection</code>单集合特点，在<code>AbstractMap</code>结构中存在着两个集合，且维护着这两个集合之间的对应关系。</p><p>先看一段JDK注释：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">* An object that maps keys to values.  A map cannot contain duplicate keys;</span><br><span class="line">* each key can map to at most one value.</span><br><span class="line">*</span><br><span class="line">* &lt;p&gt;This <span class="class"><span class="keyword">interface</span> <span class="title">takes</span> <span class="title">the</span> <span class="title">place</span> <span class="title">of</span> <span class="title">the</span> &lt;<span class="title">tt</span>&gt;<span class="title">Dictionary</span>&lt;/<span class="title">tt</span>&gt; <span class="title">class</span>, <span class="title">which</span></span></span><br><span class="line"><span class="class">* <span class="title">was</span> <span class="title">a</span> <span class="title">totally</span> <span class="title">abstract</span> <span class="title">class</span> <span class="title">rather</span> <span class="title">than</span> <span class="title">an</span> <span class="title">interface</span>.</span></span><br><span class="line"><span class="class">*</span></span><br><span class="line"><span class="class">* &lt;<span class="title">p</span>&gt;<span class="title">The</span> &lt;<span class="title">tt</span>&gt;<span class="title">Map</span>&lt;/<span class="title">tt</span>&gt; <span class="title">interface</span> <span class="title">provides</span> <span class="title">three</span> &lt;<span class="title">i</span>&gt;<span class="title">collection</span> <span class="title">views</span>&lt;/<span class="title">i</span>&gt;, <span class="title">which</span></span></span><br><span class="line"><span class="class">* <span class="title">allow</span> <span class="title">a</span> <span class="title">map</span>'<span class="title">s</span> <span class="title">contents</span> <span class="title">to</span> <span class="title">be</span> <span class="title">viewed</span> <span class="title">as</span> <span class="title">a</span> <span class="title">set</span> <span class="title">of</span> <span class="title">keys</span>, <span class="title">collection</span> <span class="title">of</span> <span class="title">values</span>,</span></span><br><span class="line"><span class="class">* <span class="title">or</span> <span class="title">set</span> <span class="title">of</span> <span class="title">key</span>-<span class="title">value</span> <span class="title">mappings</span>.  <span class="title">The</span> &lt;<span class="title">i</span>&gt;<span class="title">order</span>&lt;/<span class="title">i</span>&gt; <span class="title">of</span> <span class="title">a</span> <span class="title">map</span> <span class="title">is</span> <span class="title">defined</span> <span class="title">as</span></span></span><br><span class="line"><span class="class">* <span class="title">the</span> <span class="title">order</span> <span class="title">in</span> <span class="title">which</span> <span class="title">the</span> <span class="title">iterators</span> <span class="title">on</span> <span class="title">the</span> <span class="title">map</span>'<span class="title">s</span> <span class="title">collection</span> <span class="title">views</span> <span class="title">return</span> <span class="title">their</span></span></span><br><span class="line"><span class="class">* <span class="title">elements</span>.  <span class="title">Some</span> <span class="title">map</span> <span class="title">implementations</span>, <span class="title">like</span> <span class="title">the</span> &lt;<span class="title">tt</span>&gt;<span class="title">TreeMap</span>&lt;/<span class="title">tt</span>&gt; <span class="title">class</span>, <span class="title">make</span></span></span><br><span class="line">* specific guarantees as to their order; others, like the &lt;tt&gt;HashMap&lt;/tt&gt;</span><br><span class="line">* <span class="class"><span class="keyword">class</span>, <span class="title">do</span> <span class="title">not</span>.</span></span><br></pre></td></tr></table></figure><p>从中，我们可以总结<code>Map</code>的几大特点：<strong>keys –&gt;value映射</strong>、<strong>key是set</strong>、<strong>value是Collection</strong></p><p>Map中常用方法有：</p><table><thead><tr><th style="text-align:center">方法</th><th style="text-align:center">作用</th></tr></thead><tbody><tr><td style="text-align:center">void clear()</td><td style="text-align:center">清空map</td></tr><tr><td style="text-align:center">Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()</td><td style="text-align:center">返回map中键值对集合</td></tr><tr><td style="text-align:center">boolean equals(Object o)</td><td style="text-align:center">比较两个map是否相等</td></tr><tr><td style="text-align:center">int hashCode()</td><td style="text-align:center">计算map的hash值</td></tr><tr><td style="text-align:center">V get(Object key)</td><td style="text-align:center">根据key获取map中value</td></tr><tr><td style="text-align:center">V put(K key, V value)</td><td style="text-align:center">map中添加key-value对</td></tr><tr><td style="text-align:center">V remove(Object key)</td><td style="text-align:center">根据key移除键值对</td></tr><tr><td style="text-align:center">Set<k>keySet()</k></td><td style="text-align:center">获取map所有的key</td></tr><tr><td style="text-align:center">Collection<v>values()</v></td><td style="text-align:center">获取map所有的value</td></tr><tr><td style="text-align:center">Set&lt;Entry&lt;K,V&gt;&gt; entrySet()</td><td style="text-align:center">获取键值对集合</td></tr></tbody></table><p>Map内部接口Entry&lt;K,V&gt;中常用方法：</p><table><thead><tr><th style="text-align:center">方法</th><th style="text-align:center">作用</th></tr></thead><tbody><tr><td style="text-align:center">K getKey()</td><td style="text-align:center">获取键值对中的key</td></tr><tr><td style="text-align:center">V getValue()</td><td style="text-align:center">获取键值对中value</td></tr><tr><td style="text-align:center">V setValue(V value)</td><td style="text-align:center">设置键值对中的value</td></tr><tr><td style="text-align:center">boolean equals(Object o)</td><td style="text-align:center">比较两个键值对是否相等</td></tr><tr><td style="text-align:center">int hashCode()</td><td style="text-align:center">返回键值对的hash值</td></tr></tbody></table><p>同上，map的遍历我们也有两种方法：</p><p><strong>使用<code>keySet()</code>和<code>get(Object key)</code>进行map遍历</strong></p><p>整个过程可以简单理解成：先获取“key集合”，再通过key找value，获取全部键值对，代码如下：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;K&gt; keys = map.keySet();</span><br><span class="line"><span class="keyword">for</span>(K key:keys)&#123;</span><br><span class="line">    V value = map.get(key);</span><br><span class="line">    System.out.println(key + <span class="string">"----"</span> + value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>使用<code>entrySet()</code>进行遍历</strong></p><p>整个过程可以理解为：先获取”键值对集合“，再通过键值对，获取key和value</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Map.Entry&lt;K,V&gt;&gt; entries = map.enrtySet();</span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;K,V&gt; entry:entries)&#123;</span><br><span class="line">    K key = entry.getKey();</span><br><span class="line">    V value = entry.getValue();</span><br><span class="line">    System.out.println(key + <span class="string">"----"</span> + value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="Map子类精讲"><a href="#Map子类精讲" class="headerlink" title="Map子类精讲"></a>Map子类精讲</h3><p>这里我们主要总结<code>HashMap</code>的常用操作，详情请参考<a href="">java – HashMap详解</a></p></div><footer class="post-footer"><div class="post-tags"><a href="/tags/java-数据结构/" rel="tag"># java - 数据结构</a></div><div class="post-widgets"><div class="social_share"><div id="needsharebutton-postbottom"><span class="btn"><i class="fa fa-share-alt" aria-hidden="true"></i></span></div></div></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2019/05/14/java-增强for循环/" rel="next" title="java -- 增强for循环"><i class="fa fa-chevron-left"></i> java -- 增强for循环</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"><a href="/2019/05/14/java-泛型/" rel="prev" title="java -- 泛型">java -- 泛型 <i class="fa fa-chevron-right"></i></a></div></div></footer></div></article></div></div><div class="comments" id="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap">站点概览</li></ul><div class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/images/RQ.png" alt="RQsir"><p class="site-author-name" itemprop="name">RQsir</p><div class="site-description motion-element" itemprop="description">不积小流，无以成江海。</div></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">42</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/"><span class="site-state-item-count">9</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/"><span class="site-state-item-count">53</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/RQsir" title="GitHub &rarr; https://github.com/RQsir" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a> </span><span class="links-of-author-item"><a href="mailto:hbrq1314@gmail.com" title="E-Mail &rarr; mailto:hbrq1314@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a></span></div></div></div><div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AbstractCollection-–-单集合容器"><span class="nav-number">1.</span> <span class="nav-text">AbstractCollection – 单集合容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Collection子类精讲"><span class="nav-number">1.1.</span> <span class="nav-text">Collection子类精讲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口"><span class="nav-number">1.2.</span> <span class="nav-text">List接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkList和ArrayList之大比拼"><span class="nav-number">1.2.1.</span> <span class="nav-text">LinkList和ArrayList之大比拼</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set接口"><span class="nav-number">1.3.</span> <span class="nav-text">set接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HashSet-–-存储自定义对象"><span class="nav-number">1.3.1.</span> <span class="nav-text">HashSet – 存储自定义对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AbstractMap-–-双集合容器"><span class="nav-number">2.</span> <span class="nav-text">AbstractMap – 双集合容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Map子类精讲"><span class="nav-number">2.1.</span> <span class="nav-text">Map子类精讲</span></a></li></ol></li></ol></div></div></div></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2019</span> <span class="with-love" id="animate"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">RQsir</span></div><div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div><span class="post-meta-divider">|</span><div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.1</div><div class="busuanzi-count"><script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span class="post-meta-item-icon"><i class="fa fa-user"></i> </span><span class="site-uv" title="总访客量"><span class="busuanzi-value" id="busuanzi_value_site_uv"></span> </span><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="site-pv" title="总访问量"><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script>"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script><script src="/lib/jquery/index.js?v=2.1.3"></script><script src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script src="/js/utils.js?v=7.1.1"></script><script src="/js/motion.js?v=7.1.1"></script><script src="/js/affix.js?v=7.1.1"></script><script src="/js/schemes/pisces.js?v=7.1.1"></script><script src="/js/scrollspy.js?v=7.1.1"></script><script src="/js/post-details.js?v=7.1.1"></script><script src="/js/next-boot.js?v=7.1.1"></script><script id="dsq-count-scr" src="https://rqsirblog.disqus.com/count.js" async></script><script>var disqus_config=function(){this.page.url="http://rqsir.github.io/2019/05/14/java中的常用数据结构/",this.page.identifier="2019/05/14/java中的常用数据结构/",this.page.title="java中的常用数据结构"};function loadComments(){var t=document,e=t.createElement("script");e.src="https://rqsirblog.disqus.com/embed.js",e.setAttribute("data-timestamp",""+ +new Date),(t.head||t.body).appendChild(e)}loadComments()</script><script>// Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });</script><script>function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'DqyjdxqJD8rtbeosDwnYIgx7-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'DqyjdxqJD8rtbeosDwnYIgx7-gzGzoHsz',
+                'X-LC-Key': 'Qu0i4Sn1oNgTrPj8GwUwMuQR',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });</script><script>!function(){var t=document.createElement("script"),e=window.location.protocol.split(":")[0];t.src="https"===e?"https://zz.bdstatic.com/linksubmit/push.js":"http://push.zhanzhang.baidu.com/push.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}()</script><script src="/lib/needsharebutton/needsharebutton.js"></script><script>pbOptions={iconStyle:"default",boxForm:"horizontal",position:"bottomCenter",networks:"Wechat,Weibo,QQZone,Twitter"},new needShareButton("#needsharebutton-postbottom",pbOptions)</script><script src="/lib/pangu/dist/pangu.min.js?v=3.3"></script><script>pangu.spacingPage()</script><script>$(".highlight").not(".gist .highlight").each(function(t,e){var n=$("<div>").addClass("highlight-wrap");$(e).after(n),n.append($("<button>").addClass("copy-btn").append("复制").on("click",function(t){var e=$(this).parent().find(".code").find(".line").map(function(t,e){return $(e).text()}).toArray().join("\n"),n=document.createElement("textarea"),o=window.pageYOffset||document.documentElement.scrollTop;n.style.top=o+"px",n.style.position="absolute",n.style.opacity="0",n.readOnly=!0,n.value=e,document.body.appendChild(n),n.select(),n.setSelectionRange(0,e.length),n.readOnly=!1,document.execCommand("copy")?$(this).text("复制成功"):$(this).text("复制失败"),n.blur(),$(this).blur()})).on("mouseleave",function(t){var e=$(this).find(".copy-btn");setTimeout(function(){e.text("复制")},300)}).append(e)})</script></body></html>
