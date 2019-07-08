@@ -13,6 +13,7 @@
 {"title":"linux -- 文件编码与转换","url":"/2019/04/12/linux-文件编码与转换/"},
 {"title":"linux -- 软链接和硬链接","url":"/2019/04/12/linux-软链接和硬链接/"},
 {"title":"linux -- make install的安装与卸载","url":"/2019/04/13/linux -- make install的安装与卸载/"},
+{"title":"linux -- make install的安装与卸载","url":"/2019/04/13/linux-make-install的安装与卸载/"},
 {"title":"linux -- 编译命令总结","url":"/2019/04/13/linux-编译命令总结/"},
 {"title":"linux -- 编译JDK源码","url":"/2019/04/19/linux-编译JDK源码/"},
 {"title":"openjdk-8 -- 使用Clion调试源码","url":"/2019/04/19/openjdk-8-使用Clion调试源码/"},
@@ -43,4 +44,5 @@
 {"title":"java中的常用数据结构","url":"/2019/05/14/java中的常用数据结构/"},
 {"title":"java -- 变量相加和常量相加的区别","url":"/2019/05/21/java-变量相加和常量相加的区别/"},
 {"title":"VirtualBox 网络模式总结","url":"/2019/05/23/VirtualBox-网络模式总结/"},
+{"title":"CommonIO总结","url":"/2019/07/06/javase-CommonIO总结/"},
 ]
