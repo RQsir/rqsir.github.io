@@ -236,6 +236,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[java中的静态 && 代码块]]></title>
+    <url>%2F2019%2F04%2F25%2Fjava%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81-%E4%BB%A3%E7%A0%81%E5%9D%97%2F</url>
+    <content type="text"><![CDATA[java中的静态修饰符修饰符static： 是一个关键字，用于修饰成员变量和成员方法特点被所有对象共享可以使用类名调用静态加载优先于对象随着类的加载而加载注意事项静态方法静态方法只可以调用静态的成员（包括方法和变量）非静态方法既可以调用非静态方法和变量，也可以调用静态的方法和变量由于静态方法优先于对象创建，故静态方法中没有this对象使用场景static常用来修饰工具类中的方法和变量，例如JDK中Math工具类等。java中的代码块基本概念形式如下：12345&#123; System.out.println("这是一个java代码块"); ......&#125;分类：局部代码块和局部变量类似，出现在方法内部，主要用于限制变量和方法的作用域，即代码块外不能访问代码块中的变量和方法构造代码块和类中的构造方法类似，出现在类内部，用来存放基于类的所有对象的公共代码部分，可以降低代码冗余度，会随着对象的创建自动调用静态代码块和静态方法类似，出现在类内部，用来存放类中需要初始化的一些代码（如驱动），随着类的加载而加载，并且自动调用同步代码块用于不同线程间的同步问题一个static和代码块的面试题123456789101112131415161718192021222324252627282930313233343536public class BlockTest &#123; static &#123; System.out.println("BlockTest静态代码块执行"); &#125; &#123; System.out.println("BlockTest构造代码块执行"); &#125; public BlockTest()&#123; System.out.println("BlockTest无参构造执行了"); &#125; public static void main(String[] args) &#123; System.out.println("BlockTest的主函数执行了"); Coder c = new Coder(); Coder c2 = new Coder(); &#125;&#125;class Coder &#123; static &#123; System.out.println("Coder静态代码块执行"); &#125; &#123; System.out.println("Coder构造代码块执行"); &#125; public Coder() &#123; System.out.println("Coder无参空构造执行"); &#125;&#125;问题：代码如上，请写出程序的执行顺序分析如下：​ 首先，程序启动，JVM会加载main函数所在类，即BlockTest这个类，这时候它的静态代码块随之加载并自动执行，打印&quot;BlockTest静态代码块执行&quot;。由于main的调用是基于类的加载，并未实例化BlockTest，故其局部代码块和构造方法都不会执行。​ 接着，调用main函数，打印&quot;BlockTest的主函数执行了&quot;。接着执行Coder c = new Coder()，会加载Coder类，调用其静态代码块，打印&quot;Coder静态代码块执行&quot;。随后，在生成c对象中，首先调用其类中代码块，打印&quot;Coder构造代码块执行&quot;，然后调用其构造方法，打印&quot;Coder无参空构造执行&quot;。​ 最后，执行Coder c2 = new Coder()，和上面类似。不同的是，这时Coder类已经加载，故不会再次调用其静态代码块。但再次生成了一个新的对象c2，因此会调用其类中代码块，打印&quot;Coder构造代码块执行&quot;，接着调用其构造方法，打印&quot;Coder无参空构造执行&quot;。​ 总结：整个程序的打印输出为：1234567BlockTest静态代码块执行BlockTest的主函数执行了Coder静态代码块执行Coder构造代码块执行Coder无参空构造执行Coder构造代码块执行Coder无参空构造执行]]></content>
+      <categories>
+        <category>java-se</category>
+      </categories>
+      <tags>
+        <tag>java静态</tag>
+        <tag>java代码块</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[java中的继承 && abstract && final]]></title>
     <url>%2F2019%2F04%2F25%2Fjava%E4%B8%AD%E7%9A%84%E7%BB%A7%E6%89%BF-abstract-final%2F</url>
     <content type="text"><![CDATA[java中的继承java中的继承问题分为两类：一是成员变量的继承；二是成员方法的继承。成员变量的继承特点​ 子类只能继承父类的非私有成员变量成员变量引用原则（就近原则）​ 变量名相同，引用顺序为：局部变量 -&gt; 子类成员变量 -&gt; 父类成员变量变量之间的区别调用​ this调用子类的成员变量，super调用父类的成员变量成员方法的继承特点子类只能继承父类的非私有成员方法子类重写方法的权限修饰符要大于等于其父类，即父类方法是默认权限修饰，则子类方法可以是默认修饰符或者public修饰符成员方法的调用原则（就近原则）​ 方法名相同，调用顺序为：子类方法 -&gt; 父类方法子父类方法之重写与重载方法重写：子类方法与父类方法，不仅方法名相同，而且参数列表相同，返回值也相同，基本上一模一样。只是方法执行代码不同。方法重载：两个方法方法名相同，而参数列表不同，这是函数的重载，要与成员函数的重写加以区分。继承的优缺点继承的优点：提高了代码的复用度，减少了代码冗余提高了代码的可维护性，只用修复父类，则所有子类都修复了增强了类与类之间的联系，也是多态的前提条件继承的缺点：增加了类之间的耦合性，违反了java设计中的“低耦合，高内聚”原则this和super总结关键词含义应用场景this指向调用方法的当前对象1.调用子类的成员变量2.调用子类的成员方法3.在子类的构造函数的第一行调用子类的其他构造函数super指向当前对象的父类对象1.调用父类的成员变量2.调用父类的成员方法3.在子类的构造函数的第一行调用父类的构造函数java关键字之abstractabstract可以用来修饰类和方法，被修饰的类和方法分别被称之为“抽象类”和“抽象方法”概念解析​ 抽象类：只有含有抽象方法的类，肯定是抽象类；抽象类也可以没有抽象方法，不过这样就失去了抽象类的意义。另外，抽象类中可以含有非抽象方法。抽象类无法实例化，但这并不是因为抽象类没有构造方法，只是因为抽象类中存在抽象函数。​ 抽象方法：没有方法体，由关键词abstract修饰的方法叫做抽象方法。注意：一个类继承了抽象类，需要重写其中的所有抽象方法。否则，可以将其声明为抽象类抽象类的成员特点分类特点成员变量1. 可以有成员变量2. 可以有常量成员方法1.可以有抽象方法2.可以有非抽象方法构造方法有构造方法，需要对抽象类成员变量进行初始化构造方法会在对象实例化时，自动调用；如果调用失败，则实例化也失败。java关键字之finalfinal修饰的类，无法被继承final修饰的变量为常量，无法修改。且必须初始化，可以显示初始化（即声明时就初始化）或在构造函数初始化final修饰的成员方法，无法被重写类无法实例化的两种方法给类加上abstract关键字，使其成为抽象类。给类的构造函数加上private关键字，使其在new时，由于构造方法私有不可访问的特性，导致类实例化失败。]]></content>
@@ -248,18 +260,6 @@
         <tag>java - fianl</tag>
         <tag>this &amp;&amp; super</tag>
         <tag>java中类无法实例化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[java中的静态 && 代码块]]></title>
-    <url>%2F2019%2F04%2F25%2Fjava%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81-%E4%BB%A3%E7%A0%81%E5%9D%97%2F</url>
-    <content type="text"><![CDATA[java中的静态修饰符修饰符static： 是一个关键字，用于修饰成员变量和成员方法特点被所有对象共享可以使用类名调用静态加载优先于对象随着类的加载而加载注意事项静态方法静态方法只可以调用静态的成员（包括方法和变量）非静态方法既可以调用非静态方法和变量，也可以调用静态的方法和变量由于静态方法优先于对象创建，故静态方法中没有this对象使用场景static常用来修饰工具类中的方法和变量，例如JDK中Math工具类等。java中的代码块基本概念形式如下：12345&#123; System.out.println("这是一个java代码块"); ......&#125;分类：局部代码块和局部变量类似，出现在方法内部，主要用于限制变量和方法的作用域，即代码块外不能访问代码块中的变量和方法构造代码块和类中的构造方法类似，出现在类内部，用来存放基于类的所有对象的公共代码部分，可以降低代码冗余度，会随着对象的创建自动调用静态代码块和静态方法类似，出现在类内部，用来存放类中需要初始化的一些代码（如驱动），随着类的加载而加载，并且自动调用同步代码块用于不同线程间的同步问题一个static和代码块的面试题123456789101112131415161718192021222324252627282930313233343536public class BlockTest &#123; static &#123; System.out.println("BlockTest静态代码块执行"); &#125; &#123; System.out.println("BlockTest构造代码块执行"); &#125; public BlockTest()&#123; System.out.println("BlockTest无参构造执行了"); &#125; public static void main(String[] args) &#123; System.out.println("BlockTest的主函数执行了"); Coder c = new Coder(); Coder c2 = new Coder(); &#125;&#125;class Coder &#123; static &#123; System.out.println("Coder静态代码块执行"); &#125; &#123; System.out.println("Coder构造代码块执行"); &#125; public Coder() &#123; System.out.println("Coder无参空构造执行"); &#125;&#125;问题：代码如上，请写出程序的执行顺序分析如下：​ 首先，程序启动，JVM会加载main函数所在类，即BlockTest这个类，这时候它的静态代码块随之加载并自动执行，打印&quot;BlockTest静态代码块执行&quot;。由于main的调用是基于类的加载，并未实例化BlockTest，故其局部代码块和构造方法都不会执行。​ 接着，调用main函数，打印&quot;BlockTest的主函数执行了&quot;。接着执行Coder c = new Coder()，会加载Coder类，调用其静态代码块，打印&quot;Coder静态代码块执行&quot;。随后，在生成c对象中，首先调用其类中代码块，打印&quot;Coder构造代码块执行&quot;，然后调用其构造方法，打印&quot;Coder无参空构造执行&quot;。​ 最后，执行Coder c2 = new Coder()，和上面类似。不同的是，这时Coder类已经加载，故不会再次调用其静态代码块。但再次生成了一个新的对象c2，因此会调用其类中代码块，打印&quot;Coder构造代码块执行&quot;，接着调用其构造方法，打印&quot;Coder无参空构造执行&quot;。​ 总结：整个程序的打印输出为：1234567BlockTest静态代码块执行BlockTest的主函数执行了Coder静态代码块执行Coder构造代码块执行Coder无参空构造执行Coder构造代码块执行Coder无参空构造执行]]></content>
-      <categories>
-        <category>java-se</category>
-      </categories>
-      <tags>
-        <tag>java静态</tag>
-        <tag>java代码块</tag>
       </tags>
   </entry>
   <entry>
@@ -452,6 +452,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[docker -- 网络访问]]></title>
+    <url>%2F2019%2F04%2F09%2Fdocker-%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE%2F</url>
+    <content type="text"><![CDATA[分类外部访问容器或容器访问外部（一般是容器间相互访问）外部访问容器由于docker容器的封闭性，外部要访问容器内资源，必须借助host主机的端口映射，相关命令如下：系统随机分配主机端口给容器，完成映射1docker run -P &lt;image ID&gt;-p 则可以指定要映射的端口，并且，在一个指定端口上只可以绑定一个容器。支持的格式有1docker run -p ip:hostPort:containerPort | ip::containerPort | hostPort:containerPort第一种格式是外部指定ip固定端口，第二种是外部指定ip随机端口，第三种是外部所有ip指定端口查看端口映射使用 docker port 来查看当前映射的端口配置，也可以查看到绑定的地址使用 docker container ls通过 docker logs 命令来查看应用的信息容器互联新建网络先创建一个新的 Docker 网络。1docker network create -d bridge my-net-d 参数指定 Docker 网络类型，有 bridge、 overlay运行一个容器并加入到 my-net 网络，使用--network1docker run -it --rm --name busybox1 --network my-net busybox sh以这样的方式可以加入多个容器]]></content>
+      <categories>
+        <category>微服务</category>
+      </categories>
+      <tags>
+        <tag>docker - 网络访问</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[docker -- Error response from daemon]]></title>
     <url>%2F2019%2F04%2F09%2Fdocker-Error-response-from-daemon%2F</url>
     <content type="text"><![CDATA[错误如下：1docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:297: copying bootstrap data to pipe caused \"write init-p: broken pipe\"": unknown.由于docker的版本更新引起解决办法： 3种任选其一使用低版本的dockerdocker CE1sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntudocker EE on CentOS 7123sudo curl -SsL https://download.docker.com/linux/centos/docker-ce.repo -o /etc/yum.repos.d/docker-ce.reposudo yum --showduplicates list docker-cesudo yum install docker-ce-18.06.1.ce-3-0.el7.centos更多其他版本的安装，看这里升级linux内核例如，你现在在用Ubuntu 14.04，可以将其升级到Ubuntu 16 Xenial1sudo apt-get install linux-generic-lts-xenial升级系统版本对于Ubuntu 14.04，你可以使用一下命令升级到Xenial1sudo do-release-upgrade如果遇到14.04 --&gt; 16.04 failed; apt (&gt;= 1.0.1ubuntu2.13)&#39; is not installed报错，可以执行以下命令：12sudo apt updatesudo apt dist-upgrade]]></content>
@@ -471,17 +482,6 @@
       </categories>
       <tags>
         <tag>docker - 安装</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[docker -- 网络访问]]></title>
-    <url>%2F2019%2F04%2F09%2Fdocker-%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE%2F</url>
-    <content type="text"><![CDATA[分类外部访问容器或容器访问外部（一般是容器间相互访问）外部访问容器由于docker容器的封闭性，外部要访问容器内资源，必须借助host主机的端口映射，相关命令如下：系统随机分配主机端口给容器，完成映射1docker run -P &lt;image ID&gt;-p 则可以指定要映射的端口，并且，在一个指定端口上只可以绑定一个容器。支持的格式有1docker run -p ip:hostPort:containerPort | ip::containerPort | hostPort:containerPort第一种格式是外部指定ip固定端口，第二种是外部指定ip随机端口，第三种是外部所有ip指定端口查看端口映射使用 docker port 来查看当前映射的端口配置，也可以查看到绑定的地址使用 docker container ls通过 docker logs 命令来查看应用的信息容器互联新建网络先创建一个新的 Docker 网络。1docker network create -d bridge my-net-d 参数指定 Docker 网络类型，有 bridge、 overlay运行一个容器并加入到 my-net 网络，使用--network1docker run -it --rm --name busybox1 --network my-net busybox sh以这样的方式可以加入多个容器]]></content>
-      <categories>
-        <category>微服务</category>
-      </categories>
-      <tags>
-        <tag>docker - 网络访问</tag>
       </tags>
   </entry>
   <entry>
