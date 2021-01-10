@@ -397,17 +397,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[linux -- 程序安装]]></title>
-    <url>%2F2019%2F04%2F10%2Flinux-%E7%A8%8B%E5%BA%8F%E5%AE%89%E8%A3%85%2F</url>
-    <content type="text"><![CDATA[平时在linux使用当中，经常会碰到安装各种程序。但由于使用惯了windows系统，往往会反复的去Google；结果再次遇到时，又忘得一干二净了。基于此，特地总结如下：在linux中，一般存在3种程序安装的方法。二进制文件安装1.下载文件，解压到安装目录安装目录分为3类：/usr：系统级的目录，可以理解为C:/Windows/，/usr/lib理解为C:/Windows/System32。/usr/local：用户级的程序目录，可以理解为C:/Progrem Files/。这里主要存放那些手动安装的软件，即不是通过apt-get安装的软件。它和/usr目录具有相类似的目录结构。让软件包管理器来管理/usr目录，而把自定义的脚本(scripts)放到/usr/local目录下面，我想这应该是个不错的主意。/opt：用户级的程序目录，可以理解为D:/Software，opt有可选的意思，这里可以用于放置第三方大型软件（或游戏），当你不需要时，直接rm -rf掉即可。在硬盘容量不够时，也可将/opt单独挂载到其他磁盘上使用。2.添加软连接(以nodejs为例)12sudo ln -s /usr/local/node/bin/npm /usr/local/bin/npmsudo ln -s /usr/local/node/bin/node /usr/local/bin/node源码编译安装1.下载源码1sudo git clone https://github.com/nodejs/node.git2.修改目录权限1sudo chmod -R 755 node3.通过configure生成配置文件，并编译安装1234cd nodesudo ./configuresudo makesudo make install通过包管理器安装12sudo apt-get install nodejssudo apt-get install npm]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>linux - 程序安装</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[ubuntu -- apt update error]]></title>
     <url>%2F2019%2F04%2F10%2Fubuntu-apt-update-error%2F</url>
     <content type="text"><![CDATA[最近在一次ubuntu的例行apt更新中，竟然报错了；在一阵疯狂Google后，总算是解决了，现总结如下：出现错误尝试sudo apt update，输出如下错误：12345$ Err:17 http://ppa.launchpad.net/a-v-shkop/chromium/ubuntu bionic Release 404 Not Found [IP: 91.189.95.83 80]Reading package lists... Done E: The repository 'http://ppa.launchpad.net/a-v-shkop/chromium/ubuntu bionic Release' does not have a Release file.N: Updating from such a repository can't be done securely, and is therefore disabled by default.解决方案根据错误提示，可知为ppa源问题，解决如下：1sudo add-apt-repository -r http://ppa.launchpad.net/a-v-shkop/chromium/ubuntu另外，网上还给出了额外的shell脚本解决方法1.touch ppa-remove 新建一个文本输入如下内容：12345678910111213141516#!/bin/bashsudo rm /tmp/update.txt; tput setaf 6; echo "Initializing.. Please Wait" sudo apt-get update &gt;&gt; /tmp/update.txt 2&gt;&amp;1; awk '( /W:/ &amp;&amp; /launchpad/ &amp;&amp; /404/ ) &#123; print substr($5,26) &#125;' /tmp/update.txt &gt; /tmp/awk.txt; awk -F '/' '&#123; print $1"/"$2 &#125;' /tmp/awk.txt &gt; /tmp/awk1.txt; sort -u /tmp/awk1.txt &gt; /tmp/awk2.txttput sgr0if [ -s /tmp/awk2.txt ]then tput setaf 1 printf "PPA's going to be removed\n%s\n" "$(cat /tmp/awk2.txt)" tput sgr0 while read -r line; do echo "sudo add-apt-repository -r ppa:$line"; done &lt; /tmp/awk2.txt &gt; out bash outelse tput setaf 1 echo "No PPA's to be removed" tput sgr0fi2.赋予文件执行权限1sudo chmod +x ppa-remove3.运行1sudo ./ppa-remove]]></content>
@@ -416,6 +405,17 @@
       </categories>
       <tags>
         <tag>linux - apt update error</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux -- 程序安装]]></title>
+    <url>%2F2019%2F04%2F10%2Flinux-%E7%A8%8B%E5%BA%8F%E5%AE%89%E8%A3%85%2F</url>
+    <content type="text"><![CDATA[平时在linux使用当中，经常会碰到安装各种程序。但由于使用惯了windows系统，往往会反复的去Google；结果再次遇到时，又忘得一干二净了。基于此，特地总结如下：在linux中，一般存在3种程序安装的方法。二进制文件安装1.下载文件，解压到安装目录安装目录分为3类：/usr：系统级的目录，可以理解为C:/Windows/，/usr/lib理解为C:/Windows/System32。/usr/local：用户级的程序目录，可以理解为C:/Progrem Files/。这里主要存放那些手动安装的软件，即不是通过apt-get安装的软件。它和/usr目录具有相类似的目录结构。让软件包管理器来管理/usr目录，而把自定义的脚本(scripts)放到/usr/local目录下面，我想这应该是个不错的主意。/opt：用户级的程序目录，可以理解为D:/Software，opt有可选的意思，这里可以用于放置第三方大型软件（或游戏），当你不需要时，直接rm -rf掉即可。在硬盘容量不够时，也可将/opt单独挂载到其他磁盘上使用。2.添加软连接(以nodejs为例)12sudo ln -s /usr/local/node/bin/npm /usr/local/bin/npmsudo ln -s /usr/local/node/bin/node /usr/local/bin/node源码编译安装1.下载源码1sudo git clone https://github.com/nodejs/node.git2.修改目录权限1sudo chmod -R 755 node3.通过configure生成配置文件，并编译安装1234cd nodesudo ./configuresudo makesudo make install通过包管理器安装12sudo apt-get install nodejssudo apt-get install npm]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux - 程序安装</tag>
       </tags>
   </entry>
   <entry>
