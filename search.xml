@@ -78,17 +78,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[java -- 泛型]]></title>
-    <url>%2F2019%2F05%2F14%2Fjava-%E6%B3%9B%E5%9E%8B%2F</url>
-    <content type="text"><![CDATA[为什么要引入泛型先看一个例子，有如下代码：123456789101112131415161718192021222324252627282930public class Demo&#123; public static void main(String[] args)&#123; Student stu = new Student("zhangsan", 32); Student stu2 = new Student("lisi", 24); Collection c = new ArrayList(); c.add(stu); c.add(stu2); Iterator it = c.iterator(); while(it.hasNext())&#123; String str = (String)it.next(); System.out.println(str); &#125; &#125;&#125;class Student&#123; String name; int age; public Student()&#123; &#125; public Studnet(String name, int age)&#123; this.name = name; this.age = age; &#125;&#125;输出结果如下：12Exception in thread "main" java.lang.ClassCastException: Student cannot be cast to java.lang.String at GenericTest.main(GenericTest.java:16)这是一个java中的类型转换异常，发生的原因是我们无法将一个Student类强转为String类，因为它们之间没有继承关系。针对这种问题，java为我们提供了一种叫做泛型的机制，在编译期间就明确集合中存储元素类型，规避掉了这种不安全的转换情景。修改如下：1234567891011121314151617181920212223242526272829303132public class GenericTest &#123; public static void main(String[] args)&#123; Student stu = new Student("zhangsan", 32); Student stu2 = new Student("lisi", 24); //在声明及初始化集合变量时，就通过“&lt;Student&gt;”指明元素类型 Collection&lt;Student&gt; c = new ArrayList&lt;Student&gt;(); c.add(stu); c.add(stu2); //由于迭代器的底层操作的是集合的副本，也可以通过泛型机制指明元素类型 Iterator&lt;Student&gt; it = c.iterator(); while(it.hasNext())&#123; Student s = it.next(); System.out.println(s.name+"---"+s.age); &#125; &#125;&#125;class Student&#123; String name; int age; public Student()&#123; &#125; public Student(String name, int age)&#123; this.name = name; this.age = age; &#125;&#125;泛型给我们带来了什么泛型的好处归纳起来，有如下几点：规避了不安全类型转换问题减少IDE警告可以简化代码书写（不用手动进行类型转换）什么时候可以使用泛型是否可以使用泛型，具体以API为准；原理上只要带有&lt;E&gt;标志的类或接口，都可以使用泛型。]]></content>
-      <categories>
-        <category>java-se</category>
-      </categories>
-      <tags>
-        <tag>java - 泛型</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[java -- 迭代器并发修改异常]]></title>
     <url>%2F2019%2F05%2F14%2Fjava-%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%B9%B6%E5%8F%91%E4%BF%AE%E6%94%B9%E5%BC%82%E5%B8%B8%2F</url>
     <content type="text"><![CDATA[问题描述我们在使用iterator对象遍历集合时，时常会遇到ConcurrentModificationException这类的错误例如：123456789101112Collection c = new ArrayList(); c.add("I"); c.add("love"); c.add("java"); Iterator&lt;String&gt; it = c.iterator(); while (it.hasNext())&#123; if(it.next().equals("love")) c.add("Oracle"); //在使用迭代器遍历集合时，修改了原集合 &#125;输出为1234Exception in thread "main" java.util.ConcurrentModificationException at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:909) at java.util.ArrayList$Itr.next(ArrayList.java:859) at IteratorTest.main(IteratorTest.java:15)这主要是因为，迭代器遍历集合，实际上是对集合的副本进行操作；这期间，如果迭代器发现自己和集合不一样了，就会报ConcurrentModificationException异常。原因 – 迭代器的并发检测我们可以从JDK源码的获知，当程序执行到it.next()，实际上调用了如下代码：1234567891011public E next() &#123; checkForComodification(); //在这里迭代器将自己与原始集合进行了比较 int i = cursor; if (i &gt;= size) throw new NoSuchElementException(); Object[] elementData = ArrayList.this.elementData; if (i &gt;= elementData.length) throw new ConcurrentModificationException(); cursor = i + 1; return (E) elementData[lastRet = i];&#125;对于第一个函数checkForComodification()，其源码如下：1234final void checkForComodification() &#123; if (modCount != expectedModCount) throw new ConcurrentModificationException();&#125;这个方法主要是通过比较modConut和expectedModCount是否相等，来判断迭代器运行期间，原集合是否发生了变化。其中modCount为ArrayList的类成员变量，用来记录其变化次数；而expectedModCount作为迭代器成员变量，则存储了iterator初始化时记录到的ArrayList中的modCount值。两者相比，即可判断集合是否在迭代器操作期间发生了变化。解决方法为了解决这个并发修改异常，最直接的方法就是在iterator运行期间，不要修改原集合。但万一我们业务需要，必须得修改，又该怎么办呢？既然不允许我们直接修改原集合，那么我们可以考虑通过迭代器去间接操作原集合。通过查询API文档，我们在Iterator接口中并未发现add()方法。既然根类Iterator中没有，我们就到其子接口中去寻找。不出所料，在其Iterator子接口ListIterator中，我们发现了add()方法。首先看一下它的源码：12345678910111213public void add(E e) &#123; checkForComodification(); try &#123; int i = cursor; ArrayList.this.add(i, e); //调用了ArrayList当前对象的成员方法 cursor = i + 1; lastRet = -1; expectedModCount = modCount; //这里将expectedModCount与modCount进行了同步 &#125; catch (IndexOutOfBoundsException ex) &#123; throw new ConcurrentModificationException(); &#125; &#125;从源码中，我们可以看到，虽然仍然存在并发检测函数checkForComodification()，但add()在内部为我们完成了集合元素的添加，最最关键的是它还进行了expectedModCount与modCount同步操作，这就保证了并发修改异常不会被触发。终上所述，最开始的问题代码可以修改如下：12345678910111213//这里将c的引用类型从Collection换成List，是因为Collection接口中没有listIterator()方法，多态无法调用父接口中没有的方法 List c = new ArrayList(); c.add(&quot;I&quot;); c.add(&quot;love&quot;); c.add(&quot;java&quot;); ListIterator&lt;String&gt; it = c.listIterator();//理由同上，Iterator中没有add方法 while (it.hasNext())&#123; if(it.next().equals(&quot;love&quot;)) it.add(&quot;Oracle&quot;); &#125;]]></content>
@@ -97,6 +86,17 @@
       </categories>
       <tags>
         <tag>java - 迭代器并发修改异常</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[java -- 泛型]]></title>
+    <url>%2F2019%2F05%2F14%2Fjava-%E6%B3%9B%E5%9E%8B%2F</url>
+    <content type="text"><![CDATA[为什么要引入泛型先看一个例子，有如下代码：123456789101112131415161718192021222324252627282930public class Demo&#123; public static void main(String[] args)&#123; Student stu = new Student("zhangsan", 32); Student stu2 = new Student("lisi", 24); Collection c = new ArrayList(); c.add(stu); c.add(stu2); Iterator it = c.iterator(); while(it.hasNext())&#123; String str = (String)it.next(); System.out.println(str); &#125; &#125;&#125;class Student&#123; String name; int age; public Student()&#123; &#125; public Studnet(String name, int age)&#123; this.name = name; this.age = age; &#125;&#125;输出结果如下：12Exception in thread "main" java.lang.ClassCastException: Student cannot be cast to java.lang.String at GenericTest.main(GenericTest.java:16)这是一个java中的类型转换异常，发生的原因是我们无法将一个Student类强转为String类，因为它们之间没有继承关系。针对这种问题，java为我们提供了一种叫做泛型的机制，在编译期间就明确集合中存储元素类型，规避掉了这种不安全的转换情景。修改如下：1234567891011121314151617181920212223242526272829303132public class GenericTest &#123; public static void main(String[] args)&#123; Student stu = new Student("zhangsan", 32); Student stu2 = new Student("lisi", 24); //在声明及初始化集合变量时，就通过“&lt;Student&gt;”指明元素类型 Collection&lt;Student&gt; c = new ArrayList&lt;Student&gt;(); c.add(stu); c.add(stu2); //由于迭代器的底层操作的是集合的副本，也可以通过泛型机制指明元素类型 Iterator&lt;Student&gt; it = c.iterator(); while(it.hasNext())&#123; Student s = it.next(); System.out.println(s.name+"---"+s.age); &#125; &#125;&#125;class Student&#123; String name; int age; public Student()&#123; &#125; public Student(String name, int age)&#123; this.name = name; this.age = age; &#125;&#125;泛型给我们带来了什么泛型的好处归纳起来，有如下几点：规避了不安全类型转换问题减少IDE警告可以简化代码书写（不用手动进行类型转换）什么时候可以使用泛型是否可以使用泛型，具体以API为准；原理上只要带有&lt;E&gt;标志的类或接口，都可以使用泛型。]]></content>
+      <categories>
+        <category>java-se</category>
+      </categories>
+      <tags>
+        <tag>java - 泛型</tag>
       </tags>
   </entry>
   <entry>
